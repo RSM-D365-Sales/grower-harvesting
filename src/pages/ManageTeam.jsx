@@ -6,7 +6,7 @@ import { LoadingSpinner, ErrorMessage, EmptyState } from '../components/StatusMe
 import { useAllTeamMembers, useCreateTeamMember, useUpdateTeamMember, useDeleteTeamMember } from '../hooks/useManagement'
 
 const ROLES = [
-  { value: 'field_manager', label: 'Field Manager' },
+  { value: 'field_manager', label: 'Grower / Manager' },
   { value: 'harvester', label: 'Harvester' },
   { value: 'planner', label: 'Planner' },
   { value: 'driver', label: 'Driver' },
@@ -79,7 +79,7 @@ function TeamContent() {
     <div>
       <PageHeader
         title="Crews & Team Members"
-        description="Bluestem field staff and harvest crews assigned to picks"
+        description="Bluestem Greens growers, planners, QA, dispatch, and the harvest crew assigned to cuts"
         actions={
           !showForm && (
             <button onClick={() => { resetForm(); setShowForm(true) }}
@@ -100,7 +100,7 @@ function TeamContent() {
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Full Name *</label>
               <input required value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="Sam Fischer" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="Ingrid Larsen" />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Role *</label>
@@ -112,7 +112,7 @@ function TeamContent() {
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Email</label>
               <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="sam.fischer@bluestemfresh.com" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="ingrid.larsen@bluestemfresh.com" />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Phone</label>

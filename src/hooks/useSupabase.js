@@ -16,18 +16,24 @@ export function useDashboardKpis() {
       ] = await Promise.all([
         supabase.from('fields').select('*', { count: 'exact', head: true }).neq('status', 'idle'),
         supabase.from('grow_cycles').select('*', { count: 'exact', head: true }).eq('phase', 'harvest_ready'),
-        supabase.from('yield_records').select('quantity'),
+        supabase.from('yield_records').select('quantity, unit_of_measure'),
         supabase.from('d365_sync_queue').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
         supabase.from('harvest_schedules').select('*', { count: 'exact', head: true }),
         supabase.from('crops').select('*').eq('is_short_lead_time', true),
       ])
 
-      const totalYield = yieldData?.reduce((sum, r) => sum + Number(r.quantity), 0) || 0
+      // Greenhouse crops are recorded in heads, lbs, or bunches — total per unit, never across.
+      const yieldByUnit = {}
+      yieldData?.forEach((r) => {
+        const unit = r.unit_of_measure || 'lbs'
+        yieldByUnit[unit] = (yieldByUnit[unit] || 0) + Number(r.quantity)
+      })
 
       return {
         activeFields: activeFields || 0,
         harvestReady: harvestReady || 0,
-        totalYield,
+        totalYield: yieldByUnit.lbs || 0,
+        yieldByUnit,
         pendingSync: pendingSync || 0,
         totalSchedules: totalSchedules || 0,
         shortLeadCropCount: shortLeadCrops?.length || 0,

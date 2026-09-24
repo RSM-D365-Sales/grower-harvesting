@@ -39,8 +39,14 @@ const PHASE_COLORS = {
   complete: '#00153d',
 }
 
-// A = US Fancy, B = US #1, C = US #2 / processing, reject = cull
+// A = Premium retail, B = Foodservice, C = Processing (GRP fresh-cut), reject = compost
 const GRADE_COLORS = { A: '#3f9c35', B: '#009cde', C: '#f2a900', reject: '#d0342c' }
+
+const formatByUnit = (byUnit = {}) =>
+  Object.entries(byUnit)
+    .sort(([, a], [, b]) => b - a)
+    .map(([unit, qty]) => `${qty.toLocaleString()} ${unit}`)
+    .join(' · ') || '0 lbs'
 
 export default function Dashboard() {
   const { data: kpis, isLoading: kpisLoading, error: kpisError } = useDashboardKpis()
@@ -62,8 +68,9 @@ export default function Dashboard() {
     fill: PHASE_COLORS[phase] || '#888b8d',
   }))
 
+  // Grade split on lbs only so heads and bunches don't get added to pounds
   const gradeCounts = {}
-  yields?.forEach((y) => {
+  yields?.filter((y) => (y.unit_of_measure || 'lbs') === 'lbs').forEach((y) => {
     const g = y.grade || 'Ungraded'
     gradeCounts[g] = (gradeCounts[g] || 0) + Number(y.quantity)
   })
@@ -77,29 +84,29 @@ export default function Dashboard() {
     <div>
       <PageHeader
         title="Dashboard"
-        description="Bluestem grower blocks, the pick-to-pack pipeline, and D365 F&SC sync status"
+        description="Bluestem Greens — greenhouse bays, the seed-to-cut pipeline, and D365 F&SC sync status"
       />
 
       {/* KPI Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
         <KpiCard
-          title="Active Blocks"
+          title="Active Bays"
           value={kpis.activeFields}
-          subtitle="Grower blocks in cycle"
+          subtitle="Greenhouse bays in cycle"
           icon={MapPin}
           color="primary"
         />
         <KpiCard
           title="Harvest Ready"
           value={kpis.harvestReady}
-          subtitle="Awaiting a pick schedule"
+          subtitle="Awaiting a cut schedule"
           icon={Sprout}
           color="harvest"
         />
         <KpiCard
           title="Total Yield"
-          value={`${kpis.totalYield.toLocaleString()} lbs`}
-          subtitle="All recorded picks"
+          value={formatByUnit(kpis.yieldByUnit)}
+          subtitle="All recorded cuts"
           icon={TrendingUp}
           color="primary"
         />
@@ -113,7 +120,7 @@ export default function Dashboard() {
         <KpiCard
           title="Short Lead-Time Crops"
           value={kpis.shortLeadCropCount}
-          subtitle="≤48hr field-to-cooler"
+          subtitle="≤48hr cut-to-cooler"
           icon={AlertTriangle}
           color="red"
         />
@@ -185,7 +192,7 @@ export default function Dashboard() {
         {/* Upcoming Schedules */}
         <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm">
           <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-gray-700">Upcoming Picks</h3>
+            <h3 className="text-sm font-semibold text-gray-700">Upcoming Cuts</h3>
             <Link to="/harvest-scheduling" className="text-xs text-primary-600 hover:underline">View all</Link>
           </div>
           {upcomingSchedules.length > 0 ? (
@@ -194,7 +201,7 @@ export default function Dashboard() {
                 <div key={s.id} className="px-5 py-3 flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-800">
-                      {s.grow_cycle?.field?.name || 'Block'} — {s.grow_cycle?.crop?.name || 'Crop'}
+                      {s.grow_cycle?.field?.name || 'Bay'} — {s.grow_cycle?.crop?.name || 'Crop'}
                       {s.grow_cycle?.crop?.variety && (
                         <span className="text-gray-400 font-normal"> · {s.grow_cycle.crop.variety}</span>
                       )}
@@ -209,16 +216,16 @@ export default function Dashboard() {
               ))}
             </div>
           ) : (
-            <p className="text-gray-400 text-sm p-5 text-center">No upcoming picks scheduled</p>
+            <p className="text-gray-400 text-sm p-5 text-center">No upcoming cuts scheduled</p>
           )}
         </div>
 
         {/* Quick Links */}
         <div className="space-y-3">
           {[
-            { to: '/grow-cycles', label: 'Manage Grow Cycles', icon: Sprout, desc: 'Grower blocks from prep to final pick' },
-            { to: '/harvest-scheduling', label: 'Schedule a Pick', icon: CalendarDays, desc: 'Assign crews & dates' },
-            { to: '/yield-management', label: 'Record Yields', icon: BarChart3, desc: 'Log pick-by-pick production' },
+            { to: '/grow-cycles', label: 'Manage Grow Cycles', icon: Sprout, desc: 'Every bay from seeding to cut' },
+            { to: '/harvest-scheduling', label: 'Schedule a Cut', icon: CalendarDays, desc: 'Assign crews & dates' },
+            { to: '/yield-management', label: 'Record Yields', icon: BarChart3, desc: 'Log cut-by-cut production' },
             { to: '/d365', label: 'D365 Sync Status', icon: ArrowRightLeft, desc: 'View integration queue' },
           ].map(({ to, label, icon: Icon, desc }) => (
             <Link

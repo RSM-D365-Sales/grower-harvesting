@@ -58,7 +58,7 @@ export default function GrowCycleDetail() {
         {/* Field Info */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
           <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-            <MapPin className="w-4 h-4" /> Grower Block
+            <MapPin className="w-4 h-4" /> Bay / Room
           </h3>
           <dl className="grid grid-cols-2 gap-3 text-sm">
             <div>
@@ -66,15 +66,15 @@ export default function GrowCycleDetail() {
               <dd className="font-medium">{cycle.field?.name}</dd>
             </div>
             <div>
-              <dt className="text-gray-400">Block ID · Location</dt>
+              <dt className="text-gray-400">Location</dt>
               <dd className="font-medium">{cycle.field?.location || '—'}</dd>
             </div>
             <div>
               <dt className="text-gray-400">Area</dt>
-              <dd className="font-medium">{cycle.field?.area_acres} acres</dd>
+              <dd className="font-medium">{Number(cycle.field?.area_acres || 0).toLocaleString()} sq ft</dd>
             </div>
             <div>
-              <dt className="text-gray-400">Soil Type</dt>
+              <dt className="text-gray-400">Growing System</dt>
               <dd className="font-medium">{cycle.field?.soil_type || '—'}</dd>
             </div>
           </dl>
@@ -108,7 +108,7 @@ export default function GrowCycleDetail() {
               </dd>
             </div>
             <div>
-              <dt className="text-gray-400">Target Yield/Acre</dt>
+              <dt className="text-gray-400">Target Yield / sq ft</dt>
               <dd className="font-medium">{cycle.crop?.target_yield_per_acre} {cycle.crop?.unit_of_measure}</dd>
             </div>
           </dl>
@@ -121,7 +121,7 @@ export default function GrowCycleDetail() {
           </h3>
           <dl className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <dt className="text-gray-400">Field Prep</dt>
+              <dt className="text-gray-400">Bay Prep</dt>
               <dd className="font-medium">{cycle.field_prep_date || '—'}</dd>
             </div>
             <div className="flex justify-between">

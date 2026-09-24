@@ -1,0 +1,2 @@
+[{"id":"e7c013de-ad20-49ac-81c7-c118d78d1037","email":"admin@grower.local","full_name":"Admin Manager","role":"manager","is_active":true,"created_at":"2026-03-18T20:30:48.537583+00:00","updated_at":"2026-03-18T20:30:48.537583+00:00"}, 
+ {"id":"682b36d9-a0cb-4506-be84-7dd33d9138d2","email":"operator@grower.local","full_name":"Default Operator","role":"operator","is_active":true,"created_at":"2026-03-18T20:30:48.537583+00:00","updated_at":"2026-03-18T20:30:48.537583+00:00"}]

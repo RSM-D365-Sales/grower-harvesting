@@ -67,7 +67,7 @@ export default function HarvestScheduling() {
     <div>
       <PageHeader
         title="Harvest Scheduling"
-        description="Schedule picks on harvest-ready blocks and assign crews"
+        description="Schedule cuts on harvest-ready bays and assign crews"
         actions={
           <button
             onClick={() => setShowNew(true)}
@@ -100,7 +100,7 @@ export default function HarvestScheduling() {
           <form onSubmit={handleCreate} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Block · Crop (Harvest Ready)</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Bay · Crop (Harvest Ready)</label>
                 <select
                   value={form.grow_cycle_id}
                   onChange={(e) => setForm({ ...form, grow_cycle_id: e.target.value })}
@@ -204,8 +204,8 @@ export default function HarvestScheduling() {
       {schedules?.length === 0 ? (
         <EmptyState
           icon={CalendarDays}
-          title="No picks scheduled"
-          description="Create a schedule to assign crews to harvest-ready blocks"
+          title="No cuts scheduled"
+          description="Create a schedule to assign crews to harvest-ready bays"
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -214,7 +214,7 @@ export default function HarvestScheduling() {
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <h4 className="font-medium text-gray-800">
-                    {s.grow_cycle?.field?.name || 'Block'}
+                    {s.grow_cycle?.field?.name || 'Bay'}
                   </h4>
                   <p className="text-xs text-gray-400">
                     {s.grow_cycle?.crop?.name || 'Crop'}

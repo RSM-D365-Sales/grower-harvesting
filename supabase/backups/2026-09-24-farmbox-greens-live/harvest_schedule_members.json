@@ -1,0 +1,8 @@
+[{"id":"ad32dfc3-fdd0-4d9e-a24c-349734c0f16f","harvest_schedule_id":"6a0e7b47-7c10-4ec1-a6b1-3188aca0d87d","team_member_id":"92960934-e70a-4a7f-8a25-50a4ecebc339","role_in_harvest":"lead"}, 
+ {"id":"6b4d8f40-60df-4d1b-9fd4-1f4d8aaa19c6","harvest_schedule_id":"6a0e7b47-7c10-4ec1-a6b1-3188aca0d87d","team_member_id":"ba25433a-d57b-4c2d-896e-6d4bb685d07d","role_in_harvest":"harvester"}, 
+ {"id":"0eea1fc8-31d8-44fa-89a9-e320546477e5","harvest_schedule_id":"6a0e7b47-7c10-4ec1-a6b1-3188aca0d87d","team_member_id":"d6a73b46-09a4-42a0-832d-ebe1ed506de0","role_in_harvest":"harvester"}, 
+ {"id":"fafb5a9a-de7f-43d2-a282-ec56dd64498f","harvest_schedule_id":"045084aa-34d0-4732-89ff-3663b9d4f115","team_member_id":"081d2933-04c7-405f-9157-c0d825859d99","role_in_harvest":"quality_check"}, 
+ {"id":"d59d4ac0-0cc9-4459-b629-57eed9cf7779","harvest_schedule_id":"045084aa-34d0-4732-89ff-3663b9d4f115","team_member_id":"d327d8a1-1f9e-4ef0-89ab-cd4824129521","role_in_harvest":"harvester"}, 
+ {"id":"152c27a8-c3e2-485c-a53a-c1481206b57f","harvest_schedule_id":"9cdf279d-8979-4943-88ac-a0e94ef46eb0","team_member_id":"32f1d5c9-5588-4f09-8538-198519eccd26","role_in_harvest":"lead"}, 
+ {"id":"b2a435ad-3748-4fc2-bd72-059076299bed","harvest_schedule_id":"9cdf279d-8979-4943-88ac-a0e94ef46eb0","team_member_id":"d327d8a1-1f9e-4ef0-89ab-cd4824129521","role_in_harvest":"harvester"}, 
+ {"id":"f046af8e-b761-48a1-b362-b20b497c721d","harvest_schedule_id":"6a0e7b47-7c10-4ec1-a6b1-3188aca0d87d","team_member_id":"88caa72e-97ab-42c2-a4d4-f4a8ea59f05d","role_in_harvest":"delivery"}]

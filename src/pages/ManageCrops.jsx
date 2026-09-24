@@ -77,7 +77,7 @@ function CropsContent() {
     <div>
       <PageHeader
         title="Crops & Varieties"
-        description="Bluestem's contracted crops and varieties — grow days, field-to-cooler lead time, and target yield per acre"
+        description="Bluestem Greens crops and varieties — days seed-to-cut, cut-to-cooler lead time, and target yield per sq ft"
         actions={
           !showForm && (
             <button
@@ -101,12 +101,12 @@ function CropsContent() {
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Name *</label>
               <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="e.g. Apples" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="e.g. Living Butter Lettuce" />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Variety</label>
               <input value={form.variety} onChange={(e) => setForm({ ...form, variety: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="e.g. Honeycrisp" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="e.g. Bibb / Boston" />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Avg Grow Days *</label>
@@ -123,16 +123,16 @@ function CropsContent() {
               <select value={form.unit_of_measure} onChange={(e) => setForm({ ...form, unit_of_measure: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500">
                 <option value="lbs">lbs</option>
-                <option value="kg">kg</option>
+                <option value="heads">heads</option>
                 <option value="bunches">bunches</option>
                 <option value="each">each</option>
                 <option value="cases">cases</option>
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Target Yield / Acre</label>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Target Yield / sq ft</label>
               <input type="number" step="0.01" value={form.target_yield_per_acre} onChange={(e) => setForm({ ...form, target_yield_per_acre: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="4400" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="2.0" />
             </div>
             <div className="sm:col-span-2 lg:col-span-3 flex justify-end gap-2">
               <button type="button" onClick={resetForm} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
@@ -159,7 +159,7 @@ function CropsContent() {
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Grow Days</th>
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Lead Time</th>
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Unit</th>
-                  <th className="text-left px-5 py-3 font-medium text-gray-500">Target Yield/Acre</th>
+                  <th className="text-left px-5 py-3 font-medium text-gray-500">Target Yield / sq ft</th>
                   <th className="text-right px-5 py-3 font-medium text-gray-500">Actions</th>
                 </tr>
               </thead>

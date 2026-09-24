@@ -1,5 +1,5 @@
 const phaseConfig = {
-  field_prep: { label: 'Field Prep', color: 'bg-gray-400', textColor: 'text-gray-700', bgLight: 'bg-gray-100' },
+  field_prep: { label: 'Bay Prep', color: 'bg-gray-400', textColor: 'text-gray-700', bgLight: 'bg-gray-100' },
   planting: { label: 'Planting', color: 'bg-yellow-400', textColor: 'text-yellow-700', bgLight: 'bg-yellow-50' },
   growing: { label: 'Growing', color: 'bg-green-400', textColor: 'text-green-700', bgLight: 'bg-green-50' },
   harvest_ready: { label: 'Harvest Ready', color: 'bg-orange-400', textColor: 'text-orange-700', bgLight: 'bg-orange-50' },

@@ -6,8 +6,8 @@ import rsmLogo from '../assets/rsmus-logo.png'
 
 // Demo personas from the Bluestem pack's employees.csv (seeded by migration 008).
 const QUICK_LOGINS = [
-  { email: 'sam.fischer@bluestemfresh.com', name: 'Sam Fischer', title: 'Manager · Grower Relations' },
-  { email: 'ingrid.larsen@bluestemfresh.com', name: 'Ingrid Larsen', title: 'Operator · Field Agronomist' },
+  { email: 'ingrid.larsen@bluestemfresh.com', name: 'Ingrid Larsen', title: 'Manager · Head Grower' },
+  { email: 'ben.carter@bluestemfresh.com', name: 'Ben Carter', title: 'Operator · Production Planner' },
 ]
 
 export default function LoginPage() {
@@ -39,7 +39,7 @@ export default function LoginPage() {
             <BluestemWordmark className="text-[34px]" />
           </div>
           <h1 className="text-xl font-heading font-semibold text-midnight-900">Grower Harvesting</h1>
-          <p className="text-sm text-gray-500 mt-1">From the field, in real time.</p>
+          <p className="text-sm text-gray-500 mt-1">Lettuce show you what D365 can do.</p>
         </div>
 
         {/* Login Card */}

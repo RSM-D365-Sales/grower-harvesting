@@ -21,9 +21,22 @@ import {
   useQueueD365Sync,
 } from '../hooks/useSupabase'
 
-// Produce grades: A = US Fancy, B = US #1, C = US #2 / processing, reject = cull
+// Greenhouse grades: A = Premium retail, B = Foodservice, C = Processing (GRP fresh-cut), reject = compost
 const GRADE_COLORS = { A: '#3f9c35', B: '#009cde', C: '#f2a900', reject: '#d0342c' }
-const GRADE_LABELS = { A: 'A · US Fancy', B: 'B · US #1', C: 'C · US #2 / Processing', reject: 'Reject · Cull' }
+const GRADE_LABELS = { A: 'A · Premium retail', B: 'B · Foodservice', C: 'C · Processing (GRP)', reject: 'Reject · Compost' }
+
+// Crops are recorded in heads, lbs, or bunches — total per unit, never across.
+const sumByUnit = (rows = []) =>
+  rows.reduce((acc, y) => {
+    const unit = y.unit_of_measure || 'lbs'
+    acc[unit] = (acc[unit] || 0) + Number(y.quantity)
+    return acc
+  }, {})
+const formatByUnit = (byUnit) =>
+  Object.entries(byUnit)
+    .sort(([, a], [, b]) => b - a)
+    .map(([unit, qty]) => `${qty.toLocaleString()} ${unit}`)
+    .join(' · ') || '0'
 
 export default function YieldManagement() {
   const [showNew, setShowNew] = useState(false)
@@ -68,17 +81,19 @@ export default function YieldManagement() {
   if (isLoading) return <LoadingSpinner />
   if (error) return <ErrorMessage message={error.message} onRetry={refetch} />
 
-  // KPIs
-  const totalQty = yields?.reduce((s, y) => s + Number(y.quantity), 0) || 0
-  const gradeA = yields?.filter((y) => y.grade === 'A').reduce((s, y) => s + Number(y.quantity), 0) || 0
-  const gradeAPercent = totalQty > 0 ? Math.round((gradeA / totalQty) * 100) : 0
+  // KPIs (per unit; the Grade A share is computed on lbs records only)
+  const totalByUnit = sumByUnit(yields)
+  const lbsRows = yields?.filter((y) => (y.unit_of_measure || 'lbs') === 'lbs') || []
+  const lbsTotal = lbsRows.reduce((s, y) => s + Number(y.quantity), 0)
+  const gradeA = lbsRows.filter((y) => y.grade === 'A').reduce((s, y) => s + Number(y.quantity), 0)
+  const gradeAPercent = lbsTotal > 0 ? Math.round((gradeA / lbsTotal) * 100) : 0
 
   // Short lead-time crop yields
   const shortLeadCropIds = new Set(crops?.filter((c) => c.is_short_lead_time).map((c) => c.id) || [])
   const shortLeadYields = yields?.filter(
     (y) => y.grow_cycle?.crop && shortLeadCropIds.has(y.grow_cycle.crop.id)
   ) || []
-  const shortLeadTotal = shortLeadYields.reduce((s, y) => s + Number(y.quantity), 0)
+  const shortLeadByUnit = sumByUnit(shortLeadYields)
 
   // Chart: yield by crop
   const yieldByCrop = {}
@@ -94,7 +109,7 @@ export default function YieldManagement() {
     <div>
       <PageHeader
         title="Yield Management"
-        description="Record pick-by-pick yields — every record is queued to D365 F&SC automatically"
+        description="Record cut-by-cut yields — every record is queued to D365 F&SC automatically"
         actions={
           <button
             onClick={() => setShowNew(true)}
@@ -107,16 +122,16 @@ export default function YieldManagement() {
 
       {/* Yield KPIs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <KpiCard title="Total Yield" value={`${totalQty.toLocaleString()} lbs`} icon={TrendingUp} color="primary" />
-        <KpiCard title="Grade A %" value={`${gradeAPercent}%`} subtitle={`${gradeA.toLocaleString()} lbs`} icon={TrendingUp} color="primary" />
-        <KpiCard title="Short Lead-Time Yield" value={`${shortLeadTotal.toLocaleString()} lbs`} subtitle="≤48hr lead time crops" icon={AlertTriangle} color="red" />
+        <KpiCard title="Total Yield" value={formatByUnit(totalByUnit)} icon={TrendingUp} color="primary" />
+        <KpiCard title="Grade A %" value={`${gradeAPercent}%`} subtitle={`${gradeA.toLocaleString()} of ${lbsTotal.toLocaleString()} lbs`} icon={TrendingUp} color="primary" />
+        <KpiCard title="Short Lead-Time Yield" value={formatByUnit(shortLeadByUnit)} subtitle="≤48hr cut-to-cooler crops" icon={AlertTriangle} color="red" />
         <KpiCard title="Total Records" value={yields?.length || 0} icon={TrendingUp} color="gray" />
       </div>
 
       {/* Chart */}
       {chartData.length > 0 && (
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 mb-6">
-          <h3 className="text-sm font-semibold text-gray-700 mb-4">Yield by Crop</h3>
+          <h3 className="text-sm font-semibold text-gray-700 mb-4">Yield by Crop <span className="font-normal text-gray-400">(each crop in its own unit)</span></h3>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
@@ -170,9 +185,9 @@ export default function YieldManagement() {
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500"
               >
                 <option value="lbs">lbs</option>
-                <option value="kg">kg</option>
+                <option value="heads">heads</option>
                 <option value="bunches">bunches</option>
-                <option value="crates">crates</option>
+                <option value="cases">cases</option>
               </select>
             </div>
             <div>
@@ -220,7 +235,7 @@ export default function YieldManagement() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-100">
-                  <th className="text-left px-5 py-3 font-medium text-gray-500">Block / Crop</th>
+                  <th className="text-left px-5 py-3 font-medium text-gray-500">Bay / Crop</th>
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Quantity</th>
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Grade</th>
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Lead Time</th>

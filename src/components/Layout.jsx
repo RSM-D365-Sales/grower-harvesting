@@ -31,7 +31,7 @@ const navItems = [
 
 const setupNavItems = [
   { to: '/setup/crops', label: 'Crops & Varieties', icon: Sprout },
-  { to: '/setup/fields', label: 'Grower Blocks', icon: MapPin },
+  { to: '/setup/fields', label: 'Growing Bays', icon: MapPin },
   { to: '/setup/team', label: 'Crews & Team', icon: Users },
 ]
 
@@ -89,7 +89,7 @@ export default function Layout() {
             <BluestemWordmark onDark className="text-[22px]" />
           </div>
           <p className="mt-2.5 text-[13.5px] font-heading font-semibold">Grower Harvesting</p>
-          <p className="text-[11.5px] text-midnight-300 italic">From the field, in real time.</p>
+          <p className="text-[11.5px] text-midnight-300 italic">Lettuce show you what D365 can do.</p>
         </div>
 
         <nav className="mt-4 px-3 space-y-1">
@@ -180,7 +180,7 @@ export default function Layout() {
 
           <div className="ml-auto flex items-center gap-4">
             <span className="hidden md:inline-flex items-center px-2.5 py-1 rounded-full bg-primary-50 text-primary-600 text-[11px] font-medium">
-              Bluestem Fresh Produce · HRT / GRP / HOL / SAL
+              Bluestem Greens · Holland Greenhouse Campus
             </span>
             <span className="hidden sm:flex items-center gap-2 pl-4 border-l border-gray-200">
               <span className="text-[11px] text-brand-grey">Powered by</span>
