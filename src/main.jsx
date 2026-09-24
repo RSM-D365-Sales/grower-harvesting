@@ -18,7 +18,8 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter basename="/grower-harvesting">
+      {/* Follow Vite's base: '/grower-harvesting/' for the subpath build, '/' when BASE_PATH=/ (Cloudflare Pages). */}
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <AuthProvider>
           <App />
         </AuthProvider>

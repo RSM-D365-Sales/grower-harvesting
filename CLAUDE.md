@@ -34,6 +34,10 @@ folder spelling): `BRAND_GUIDE.md`, `PUN_BANK.md`, and
 - Login is an email lookup against `app_users` (no password) — demo personas
   come from `employees.csv`: Sam Fischer (manager), Ingrid Larsen / Rosa
   Delgado (operators). Don't add password fields.
-- Deploys to GitHub Pages on push to `master` (`.github/workflows/deploy-pages.yml`),
-  base path `/grower-harvesting/`. Brand PNGs in `public/brand/` are
-  referenced with absolute `/brand/...` paths so Vite rewrites them with the base.
+- Deploys on push to `master`: Cloudflare Pages via its Git integration (the live
+  demo, https://grower-harvesting.rsmd365.com, built with `BASE_PATH=/`) and
+  Azure Static Web Apps (`.github/workflows/azure-static-web-apps-*.yml`).
+  GitHub Pages is disabled on the repo — don't re-add a `deploy-pages` workflow
+  or a `public/404.html` (a 404.html turns off Cloudflare's SPA fallback).
+  The router basename follows `import.meta.env.BASE_URL`; brand PNGs in
+  `public/brand/` use absolute `/brand/...` paths so Vite rewrites them with the base.
