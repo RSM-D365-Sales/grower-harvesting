@@ -76,8 +76,8 @@ function CropsContent() {
   return (
     <div>
       <PageHeader
-        title="Manage Crops"
-        description="Add, edit, or remove crop definitions used in grow cycles"
+        title="Crops & Varieties"
+        description="Bluestem's contracted crops and varieties — grow days, field-to-cooler lead time, and target yield per acre"
         actions={
           !showForm && (
             <button
@@ -101,12 +101,12 @@ function CropsContent() {
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Name *</label>
               <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="e.g. Baby Spinach" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="e.g. Apples" />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Variety</label>
               <input value={form.variety} onChange={(e) => setForm({ ...form, variety: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="e.g. Bloomsdale" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="e.g. Honeycrisp" />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Avg Grow Days *</label>
@@ -132,7 +132,7 @@ function CropsContent() {
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Target Yield / Acre</label>
               <input type="number" step="0.01" value={form.target_yield_per_acre} onChange={(e) => setForm({ ...form, target_yield_per_acre: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="800" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="4400" />
             </div>
             <div className="sm:col-span-2 lg:col-span-3 flex justify-end gap-2">
               <button type="button" onClick={resetForm} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>

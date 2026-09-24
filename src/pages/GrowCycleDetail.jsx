@@ -58,7 +58,7 @@ export default function GrowCycleDetail() {
         {/* Field Info */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
           <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-            <MapPin className="w-4 h-4" /> Field Details
+            <MapPin className="w-4 h-4" /> Grower Block
           </h3>
           <dl className="grid grid-cols-2 gap-3 text-sm">
             <div>
@@ -66,7 +66,7 @@ export default function GrowCycleDetail() {
               <dd className="font-medium">{cycle.field?.name}</dd>
             </div>
             <div>
-              <dt className="text-gray-400">Location</dt>
+              <dt className="text-gray-400">Block ID · Location</dt>
               <dd className="font-medium">{cycle.field?.location || '—'}</dd>
             </div>
             <div>

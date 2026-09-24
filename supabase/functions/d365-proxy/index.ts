@@ -38,7 +38,7 @@
  *
  *   1. Register an app in Azure AD
  *      Azure Portal → Azure Active Directory → App Registrations → New Registration
- *      - Name: "Grower Harvesting D365 Integration"
+ *      - Name: "Bluestem Grower Harvesting D365 Integration"
  *      - Supported account types: Single tenant
  *      - No redirect URI needed
  *

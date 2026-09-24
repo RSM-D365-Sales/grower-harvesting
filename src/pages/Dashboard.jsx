@@ -29,14 +29,18 @@ import StatusBadge from '../components/StatusBadge'
 import { LoadingSpinner, ErrorMessage } from '../components/StatusMessages'
 import { useDashboardKpis, useGrowCycles, useHarvestSchedules, useYieldRecords } from '../hooks/useSupabase'
 
+// Brand chart order: Blue → Green → Amber → Midnight → Mid Grey (BRAND_GUIDE.md).
 const PHASE_COLORS = {
-  field_prep: '#9ca3af',
-  planting: '#facc15',
-  growing: '#4ade80',
-  harvest_ready: '#fb923c',
-  harvesting: '#f87171',
-  complete: '#60a5fa',
+  field_prep: '#888b8d',
+  planting: '#3a4fa8',
+  growing: '#009cde',
+  harvest_ready: '#f2a900',
+  harvesting: '#3f9c35',
+  complete: '#00153d',
 }
+
+// A = US Fancy, B = US #1, C = US #2 / processing, reject = cull
+const GRADE_COLORS = { A: '#3f9c35', B: '#009cde', C: '#f2a900', reject: '#d0342c' }
 
 export default function Dashboard() {
   const { data: kpis, isLoading: kpisLoading, error: kpisError } = useDashboardKpis()
@@ -55,7 +59,7 @@ export default function Dashboard() {
   const phaseChartData = Object.entries(phaseCounts).map(([phase, count]) => ({
     phase: phase.replace('_', ' '),
     count,
-    fill: PHASE_COLORS[phase] || '#94a3b8',
+    fill: PHASE_COLORS[phase] || '#888b8d',
   }))
 
   const gradeCounts = {}
@@ -64,7 +68,6 @@ export default function Dashboard() {
     gradeCounts[g] = (gradeCounts[g] || 0) + Number(y.quantity)
   })
   const gradeChartData = Object.entries(gradeCounts).map(([grade, qty]) => ({ name: grade, value: qty }))
-  const GRADE_COLORS = ['#22c55e', '#facc15', '#fb923c', '#ef4444', '#94a3b8']
 
   const upcomingSchedules = schedules
     ?.filter((s) => s.status === 'scheduled')
@@ -74,29 +77,29 @@ export default function Dashboard() {
     <div>
       <PageHeader
         title="Dashboard"
-        description="Overview of your grower operations, harvest pipeline, and D365 sync status"
+        description="Bluestem grower blocks, the pick-to-pack pipeline, and D365 F&SC sync status"
       />
 
       {/* KPI Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
         <KpiCard
-          title="Active Fields"
+          title="Active Blocks"
           value={kpis.activeFields}
-          subtitle="Currently in cycle"
+          subtitle="Grower blocks in cycle"
           icon={MapPin}
           color="primary"
         />
         <KpiCard
           title="Harvest Ready"
           value={kpis.harvestReady}
-          subtitle="Awaiting scheduling"
+          subtitle="Awaiting a pick schedule"
           icon={Sprout}
           color="harvest"
         />
         <KpiCard
           title="Total Yield"
           value={`${kpis.totalYield.toLocaleString()} lbs`}
-          subtitle="All recorded"
+          subtitle="All recorded picks"
           icon={TrendingUp}
           color="primary"
         />
@@ -110,7 +113,7 @@ export default function Dashboard() {
         <KpiCard
           title="Short Lead-Time Crops"
           value={kpis.shortLeadCropCount}
-          subtitle="≤48hr lead time"
+          subtitle="≤48hr field-to-cooler"
           icon={AlertTriangle}
           color="red"
         />
@@ -149,7 +152,7 @@ export default function Dashboard() {
 
         {/* Yield by Grade */}
         <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-          <h3 className="text-sm font-semibold text-gray-700 mb-4">Yield by Grade</h3>
+          <h3 className="text-sm font-semibold text-gray-700 mb-4">Yield by Grade (lbs)</h3>
           {gradeChartData.length > 0 ? (
             <ResponsiveContainer width="100%" height={260}>
               <PieChart>
@@ -161,10 +164,10 @@ export default function Dashboard() {
                   outerRadius={100}
                   paddingAngle={3}
                   dataKey="value"
-                  label={({ name, value }) => `${name}: ${value}`}
+                  label={({ name, value }) => `${name}: ${value.toLocaleString()}`}
                 >
-                  {gradeChartData.map((_, i) => (
-                    <Cell key={i} fill={GRADE_COLORS[i % GRADE_COLORS.length]} />
+                  {gradeChartData.map((entry, i) => (
+                    <Cell key={i} fill={GRADE_COLORS[entry.name] || '#888b8d'} />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -182,7 +185,7 @@ export default function Dashboard() {
         {/* Upcoming Schedules */}
         <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm">
           <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-gray-700">Upcoming Harvest Schedules</h3>
+            <h3 className="text-sm font-semibold text-gray-700">Upcoming Picks</h3>
             <Link to="/harvest-scheduling" className="text-xs text-primary-600 hover:underline">View all</Link>
           </div>
           {upcomingSchedules.length > 0 ? (
@@ -191,7 +194,10 @@ export default function Dashboard() {
                 <div key={s.id} className="px-5 py-3 flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-800">
-                      {s.grow_cycle?.field?.name || 'Field'} — {s.grow_cycle?.crop?.name || 'Crop'}
+                      {s.grow_cycle?.field?.name || 'Block'} — {s.grow_cycle?.crop?.name || 'Crop'}
+                      {s.grow_cycle?.crop?.variety && (
+                        <span className="text-gray-400 font-normal"> · {s.grow_cycle.crop.variety}</span>
+                      )}
                     </p>
                     <p className="text-xs text-gray-400 mt-0.5 flex items-center gap-1">
                       <Clock className="w-3 h-3" />
@@ -203,16 +209,16 @@ export default function Dashboard() {
               ))}
             </div>
           ) : (
-            <p className="text-gray-400 text-sm p-5 text-center">No upcoming schedules</p>
+            <p className="text-gray-400 text-sm p-5 text-center">No upcoming picks scheduled</p>
           )}
         </div>
 
         {/* Quick Links */}
         <div className="space-y-3">
           {[
-            { to: '/grow-cycles', label: 'Manage Grow Cycles', icon: Sprout, desc: 'Track field prep to harvest' },
-            { to: '/harvest-scheduling', label: 'Schedule Harvest', icon: CalendarDays, desc: 'Assign team & dates' },
-            { to: '/yield-management', label: 'Record Yields', icon: BarChart3, desc: 'Log production data' },
+            { to: '/grow-cycles', label: 'Manage Grow Cycles', icon: Sprout, desc: 'Grower blocks from prep to final pick' },
+            { to: '/harvest-scheduling', label: 'Schedule a Pick', icon: CalendarDays, desc: 'Assign crews & dates' },
+            { to: '/yield-management', label: 'Record Yields', icon: BarChart3, desc: 'Log pick-by-pick production' },
             { to: '/d365', label: 'D365 Sync Status', icon: ArrowRightLeft, desc: 'View integration queue' },
           ].map(({ to, label, icon: Icon, desc }) => (
             <Link

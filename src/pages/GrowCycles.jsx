@@ -60,7 +60,7 @@ export default function GrowCycles() {
     <div>
       <PageHeader
         title="Grow Cycles"
-        description="Track every cycle from field preparation through harvest completion"
+        description="Track every grower block from bed prep through the final pick"
         actions={
           <button
             onClick={() => setShowNew(true)}
@@ -100,16 +100,16 @@ export default function GrowCycles() {
           <h3 className="text-sm font-semibold text-gray-700 mb-4">Start New Grow Cycle</h3>
           <form onSubmit={handleCreate} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Field</label>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Grower Block</label>
               <select
                 value={form.field_id}
                 onChange={(e) => setForm({ ...form, field_id: e.target.value })}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 required
               >
-                <option value="">Select field...</option>
+                <option value="">Select block...</option>
                 {fields?.map((f) => (
-                  <option key={f.id} value={f.id}>{f.name} ({f.area_acres} acres)</option>
+                  <option key={f.id} value={f.id}>{f.name} ({f.area_acres} ac)</option>
                 ))}
               </select>
             </div>
@@ -170,7 +170,7 @@ export default function GrowCycles() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-100">
-                  <th className="text-left px-5 py-3 font-medium text-gray-500">Field</th>
+                  <th className="text-left px-5 py-3 font-medium text-gray-500">Grower Block</th>
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Crop</th>
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Phase</th>
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Prep Date</th>
@@ -184,7 +184,7 @@ export default function GrowCycles() {
                   <tr key={c.id} className="hover:bg-gray-50/50">
                     <td className="px-5 py-3">
                       <p className="font-medium text-gray-800">{c.field?.name}</p>
-                      <p className="text-xs text-gray-400">{c.field?.area_acres} acres</p>
+                      <p className="text-xs text-gray-400">{c.field?.area_acres} ac · {c.field?.location}</p>
                     </td>
                     <td className="px-5 py-3">
                       <p className="text-gray-700">{c.crop?.name}</p>

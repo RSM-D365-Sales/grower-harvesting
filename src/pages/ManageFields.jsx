@@ -79,7 +79,7 @@ function FieldsContent() {
   }
 
   const handleDelete = async (id) => {
-    if (window.confirm('Delete this field? Associated grow cycles will also be removed.')) {
+    if (window.confirm('Delete this block? Associated grow cycles will also be removed.')) {
       await deleteField.mutateAsync(id)
     }
   }
@@ -90,13 +90,13 @@ function FieldsContent() {
   return (
     <div>
       <PageHeader
-        title="Manage Fields"
-        description="Add, edit, or remove growing field locations"
+        title="Grower Blocks"
+        description="Contracted grower blocks, winter-program partners, and protected-culture houses"
         actions={
           !showForm && (
             <button onClick={() => { resetForm(); setShowForm(true) }}
               className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
-              <Plus className="w-4 h-4" /> Add Field
+              <Plus className="w-4 h-4" /> Add Block
             </button>
           )
         }
@@ -105,19 +105,19 @@ function FieldsContent() {
       {showForm && (
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 mb-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-800">{editingId ? 'Edit Field' : 'New Field'}</h3>
+            <h3 className="font-semibold text-gray-800">{editingId ? 'Edit Block' : 'New Block'}</h3>
             <button onClick={resetForm} className="p-1 hover:bg-gray-100 rounded"><X className="w-4 h-4" /></button>
           </div>
           <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Field Name *</label>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Block Name *</label>
               <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="North Ridge A" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="Vander Molen Farms · West Block 3" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Location</label>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Block ID · Location</label>
               <input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="Block A, North Campus" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="B0003 · Newaygo, MI" />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Area (acres)</label>
@@ -127,7 +127,7 @@ function FieldsContent() {
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Soil Type</label>
               <input value={form.soil_type} onChange={(e) => setForm({ ...form, soil_type: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="Loam" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="Sandy loam" />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Status</label>
@@ -148,15 +148,15 @@ function FieldsContent() {
       )}
 
       {fields?.length === 0 ? (
-        <EmptyState icon={MapPin} title="No fields defined" description="Add your first growing field location" />
+        <EmptyState icon={MapPin} title="No grower blocks defined" description="Add your first contracted grower block" />
       ) : (
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-100">
-                  <th className="text-left px-5 py-3 font-medium text-gray-500">Name</th>
-                  <th className="text-left px-5 py-3 font-medium text-gray-500">Location</th>
+                  <th className="text-left px-5 py-3 font-medium text-gray-500">Block</th>
+                  <th className="text-left px-5 py-3 font-medium text-gray-500">Block ID · Location</th>
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Acres</th>
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Soil</th>
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Status</th>

@@ -21,7 +21,9 @@ import {
   useQueueD365Sync,
 } from '../hooks/useSupabase'
 
-const GRADE_COLORS = { A: '#22c55e', B: '#facc15', C: '#fb923c', reject: '#ef4444' }
+// Produce grades: A = US Fancy, B = US #1, C = US #2 / processing, reject = cull
+const GRADE_COLORS = { A: '#3f9c35', B: '#009cde', C: '#f2a900', reject: '#d0342c' }
+const GRADE_LABELS = { A: 'A · US Fancy', B: 'B · US #1', C: 'C · US #2 / Processing', reject: 'Reject · Cull' }
 
 export default function YieldManagement() {
   const [showNew, setShowNew] = useState(false)
@@ -92,7 +94,7 @@ export default function YieldManagement() {
     <div>
       <PageHeader
         title="Yield Management"
-        description="Record and track harvest yields — with automatic D365 sync"
+        description="Record pick-by-pick yields — every record is queued to D365 F&SC automatically"
         actions={
           <button
             onClick={() => setShowNew(true)}
@@ -121,7 +123,7 @@ export default function YieldManagement() {
               <XAxis dataKey="name" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 12 }} />
               <Tooltip />
-              <Bar dataKey="total" radius={[6, 6, 0, 0]} fill="#22c55e" />
+              <Bar dataKey="total" radius={[6, 6, 0, 0]} fill="#009cde" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -180,10 +182,9 @@ export default function YieldManagement() {
                 onChange={(e) => setForm({ ...form, grade: e.target.value })}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500"
               >
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="reject">Reject</option>
+                {Object.entries(GRADE_LABELS).map(([value, label]) => (
+                  <option key={value} value={value}>{label}</option>
+                ))}
               </select>
             </div>
             <div className="flex items-end gap-2">
@@ -219,7 +220,7 @@ export default function YieldManagement() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-100">
-                  <th className="text-left px-5 py-3 font-medium text-gray-500">Field / Crop</th>
+                  <th className="text-left px-5 py-3 font-medium text-gray-500">Block / Crop</th>
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Quantity</th>
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Grade</th>
                   <th className="text-left px-5 py-3 font-medium text-gray-500">Lead Time</th>
@@ -241,9 +242,10 @@ export default function YieldManagement() {
                       <td className="px-5 py-3">
                         <span
                           className="inline-block w-6 h-6 rounded-full text-xs font-bold text-white flex items-center justify-center"
-                          style={{ backgroundColor: GRADE_COLORS[y.grade] || '#94a3b8' }}
+                          style={{ backgroundColor: GRADE_COLORS[y.grade] || '#888b8d' }}
+                          title={GRADE_LABELS[y.grade] || y.grade}
                         >
-                          {y.grade}
+                          {y.grade === 'reject' ? 'R' : y.grade}
                         </span>
                       </td>
                       <td className="px-5 py-3">

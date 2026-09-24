@@ -51,14 +51,14 @@ export default function D365Mappings() {
     <div>
       <PageHeader
         title="D365 Entity Mappings & Sync Log"
-        description="Map local crops/fields to D365 products/warehouses and view extraction history"
+        description="Map crops to D365 released products and grower blocks to receiving warehouses (HRT / GRP / HOL / SAL), and view extraction history"
       />
 
       {/* Tab Switcher */}
       <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit mb-6">
         {[
           { key: 'crops', label: 'Crop → Product' },
-          { key: 'fields', label: 'Field → Warehouse' },
+          { key: 'fields', label: 'Block → Warehouse' },
           { key: 'log', label: 'Sync History' },
         ].map(({ key, label }) => (
           <button
@@ -123,21 +123,22 @@ export default function D365Mappings() {
       {tab === 'fields' && (
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
           <h3 className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-2">
-            <Link2 className="w-4 h-4" /> Map Fields to D365 Warehouses
+            <Link2 className="w-4 h-4" /> Map Grower Blocks to D365 Warehouses
           </h3>
           <p className="text-xs text-gray-400 mb-4">
-            Link each growing field to a D365 warehouse/site for inventory and production order context.
+            Link each grower block to the D365 warehouse/site its picks are delivered to (Hart packing house,
+            Grand Rapids fresh-cut, Salinas cross-dock) for inventory and production order context.
           </p>
 
           {!fields?.length ? (
-            <p className="text-sm text-gray-400">No fields defined</p>
+            <p className="text-sm text-gray-400">No grower blocks defined</p>
           ) : (
             <div className="space-y-3">
               {fields.map((field) => (
                 <div key={field.id} className="flex items-center gap-4 p-3 border border-gray-100 rounded-lg">
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-800 text-sm">{field.name}</p>
-                    <p className="text-xs text-gray-400">{field.location} • {field.area_acres} acres • {field.soil_type}</p>
+                    <p className="text-xs text-gray-400">{field.location} • {field.area_acres} ac • {field.soil_type}</p>
                   </div>
                   <ArrowRightLeft className="w-4 h-4 text-gray-300 flex-shrink-0" />
                   <div className="w-64">

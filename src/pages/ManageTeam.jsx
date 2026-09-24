@@ -78,8 +78,8 @@ function TeamContent() {
   return (
     <div>
       <PageHeader
-        title="Manage Team Members"
-        description="Add, edit, or deactivate team members assigned to harvest operations"
+        title="Crews & Team Members"
+        description="Bluestem field staff and harvest crews assigned to picks"
         actions={
           !showForm && (
             <button onClick={() => { resetForm(); setShowForm(true) }}
@@ -100,7 +100,7 @@ function TeamContent() {
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Full Name *</label>
               <input required value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="Maria Gonzalez" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="Sam Fischer" />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Role *</label>
@@ -112,12 +112,12 @@ function TeamContent() {
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Email</label>
               <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="maria@example.com" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="sam.fischer@bluestemfresh.com" />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Phone</label>
               <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="555-0123" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500" placeholder="(616) 555-0140" />
             </div>
             <div className="flex items-end">
               <label className="flex items-center gap-2 text-sm text-gray-700">

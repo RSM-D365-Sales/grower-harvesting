@@ -31,7 +31,7 @@ export default function D365Products() {
           <button
             onClick={handleExtract}
             disabled={extract.isPending}
-            className="flex items-center gap-2 px-4 py-2 bg-d365-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-d365-600 text-white text-sm font-medium rounded-lg hover:bg-d365-700 transition-colors disabled:opacity-50"
           >
             {extract.isPending ? (
               <><RefreshCw className="w-4 h-4 animate-spin" /> Extracting...</>

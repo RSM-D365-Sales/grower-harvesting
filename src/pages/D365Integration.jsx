@@ -44,8 +44,8 @@ export default function D365Integration() {
   return (
     <div>
       <PageHeader
-        title="D365 F&SCM Integration"
-        description="Monitor and manage data sync to Dynamics 365 Finance & Supply Chain"
+        title="D365 F&SC Integration"
+        description="Monitor and manage data sync to Bluestem's Dynamics 365 Finance & Supply Chain environment (BFP-UAT)"
         actions={
           <button
             onClick={() => refetch()}
@@ -79,7 +79,7 @@ export default function D365Integration() {
           <button
             onClick={runHealthCheck}
             disabled={healthLoading}
-            className="flex items-center gap-2 px-4 py-2 bg-d365-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-d365-600 text-white text-sm font-medium rounded-lg hover:bg-d365-700 transition-colors disabled:opacity-50"
           >
             {healthLoading ? (
               <><Loader2 className="w-4 h-4 animate-spin" /> Testing...</>
@@ -149,7 +149,7 @@ export default function D365Integration() {
       </div>
 
       {/* Integration Architecture Info */}
-      <div className="bg-d365-50 border border-blue-200 rounded-xl p-5 mb-6">
+      <div className="bg-d365-50 border border-d365-200 rounded-xl p-5 mb-6">
         <h3 className="text-sm font-semibold text-d365-600 mb-2 flex items-center gap-2">
           <ArrowRightLeft className="w-4 h-4" /> D365 Integration Architecture
         </h3>
@@ -159,15 +159,15 @@ export default function D365Integration() {
           via OData / Data Entities.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <div className="bg-white rounded-lg p-3 border border-blue-100">
+          <div className="bg-white rounded-lg p-3 border border-d365-100">
             <p className="font-semibold text-gray-700">Harvest Data</p>
             <p className="text-gray-500 mt-1">→ D365 Production Orders</p>
           </div>
-          <div className="bg-white rounded-lg p-3 border border-blue-100">
+          <div className="bg-white rounded-lg p-3 border border-d365-100">
             <p className="font-semibold text-gray-700">Yield Records</p>
             <p className="text-gray-500 mt-1">→ D365 Inventory Journals</p>
           </div>
-          <div className="bg-white rounded-lg p-3 border border-blue-100">
+          <div className="bg-white rounded-lg p-3 border border-d365-100">
             <p className="font-semibold text-gray-700">Product Data</p>
             <p className="text-gray-500 mt-1">→ D365 Released Products</p>
           </div>
@@ -256,7 +256,7 @@ export default function D365Integration() {
                         <button
                           onClick={() => retrySync.mutate(q.id)}
                           disabled={retrySync.isPending}
-                          className="px-3 py-1 text-xs bg-d365-50 text-d365-600 rounded-md hover:bg-blue-100 font-medium disabled:opacity-50"
+                          className="px-3 py-1 text-xs bg-d365-50 text-d365-600 rounded-md hover:bg-d365-100 font-medium disabled:opacity-50"
                         >
                           Retry
                         </button>

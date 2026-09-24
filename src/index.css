@@ -1,27 +1,63 @@
+@import "@fontsource/poppins/500.css";
+@import "@fontsource/poppins/600.css";
 @import "tailwindcss";
 
+/* Bluestem Fresh Produce brand — see ../Blustem-company-details/BRAND_GUIDE.md.
+   primary  = RSM Blue scale. 500 is the brand blue (accents, active nav, chart
+              series 1); 600/700 are the deepened "accent ink" blues that pass AA
+              on white, used for buttons and links.
+   midnight = chrome (sidebar, headings) plus the on-Midnight text greys.
+   harvest  = Harvest Amber, warning / watch states only.
+   d365     = Lifted Midnight for the F&SC pages so the integration UI stays
+              distinct from the grower-side blue.
+   RSM Green (#3F9C35) is reserved for "good" / on-target status and the leaf. */
 @theme {
-  --color-primary-50: #f0fdf4;
-  --color-primary-100: #dcfce7;
-  --color-primary-200: #bbf7d0;
-  --color-primary-300: #86efac;
-  --color-primary-400: #4ade80;
-  --color-primary-500: #22c55e;
-  --color-primary-600: #16a34a;
-  --color-primary-700: #15803d;
-  --color-primary-800: #166534;
-  --color-primary-900: #14532d;
+  --font-sans: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-heading: "Poppins", "Segoe UI", system-ui, sans-serif;
 
-  --color-harvest-50: #fffbeb;
-  --color-harvest-500: #f59e0b;
-  --color-harvest-600: #d97706;
+  --color-primary-50: #e5f5fc;
+  --color-primary-100: #cceaf8;
+  --color-primary-200: #99d7f2;
+  --color-primary-300: #66c4eb;
+  --color-primary-400: #33b0e5;
+  --color-primary-500: #009cde;
+  --color-primary-600: #00739f;
+  --color-primary-700: #005c80;
+  --color-primary-800: #0b2454;
+  --color-primary-900: #00153d;
 
-  --color-d365-50: #eff6ff;
-  --color-d365-500: #3b82f6;
-  --color-d365-600: #2563eb;
+  --color-midnight-100: #e6ecf5;
+  --color-midnight-200: #c9d1db;
+  --color-midnight-300: #9fb0cc;
+  --color-midnight-400: #6f82a8;
+  --color-midnight-700: #123066;
+  --color-midnight-800: #0b2454;
+  --color-midnight-900: #00153d;
+
+  --color-brand-blue: #009cde;
+  --color-brand-green: #3f9c35;
+  --color-brand-amber: #f2a900;
+  --color-brand-red: #d0342c;
+  --color-brand-grey: #888b8d;
+
+  --color-harvest-50: #fff8e1;
+  --color-harvest-500: #f2a900;
+  --color-harvest-600: #b57e00;
+
+  --color-d365-50: #eef0f9;
+  --color-d365-100: #e3e7f5;
+  --color-d365-200: #c5cceb;
+  --color-d365-500: #3a4fa8;
+  --color-d365-600: #2f4190;
+  --color-d365-700: #26357a;
 }
 
-body {
-  @apply bg-gray-50 text-gray-900 antialiased;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+  }
 }

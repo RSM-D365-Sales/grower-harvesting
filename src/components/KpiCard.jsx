@@ -2,7 +2,7 @@ export default function KpiCard({ title, value, subtitle, icon: Icon, color = 'p
   const colorMap = {
     primary: 'bg-primary-50 text-primary-600 border-primary-200',
     harvest: 'bg-harvest-50 text-harvest-600 border-amber-200',
-    d365: 'bg-d365-50 text-d365-600 border-blue-200',
+    d365: 'bg-d365-50 text-d365-600 border-d365-200',
     red: 'bg-red-50 text-red-600 border-red-200',
     gray: 'bg-gray-50 text-gray-600 border-gray-200',
   }

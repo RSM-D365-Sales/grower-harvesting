@@ -67,7 +67,7 @@ export default function HarvestScheduling() {
     <div>
       <PageHeader
         title="Harvest Scheduling"
-        description="Schedule harvests and assign team members"
+        description="Schedule picks on harvest-ready blocks and assign crews"
         actions={
           <button
             onClick={() => setShowNew(true)}
@@ -100,7 +100,7 @@ export default function HarvestScheduling() {
           <form onSubmit={handleCreate} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Grow Cycle (Harvest Ready)</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Block · Crop (Harvest Ready)</label>
                 <select
                   value={form.grow_cycle_id}
                   onChange={(e) => setForm({ ...form, grow_cycle_id: e.target.value })}
@@ -149,7 +149,7 @@ export default function HarvestScheduling() {
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-2">
                 <Users className="w-3.5 h-3.5 inline mr-1" />
-                Assign Team Members
+                Assign Crew &amp; Team
               </label>
               <div className="flex flex-wrap gap-2">
                 {teamMembers?.map((tm) => (
@@ -204,8 +204,8 @@ export default function HarvestScheduling() {
       {schedules?.length === 0 ? (
         <EmptyState
           icon={CalendarDays}
-          title="No harvest schedules"
-          description="Create a schedule to assign teams to harvest-ready cycles"
+          title="No picks scheduled"
+          description="Create a schedule to assign crews to harvest-ready blocks"
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -214,9 +214,12 @@ export default function HarvestScheduling() {
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <h4 className="font-medium text-gray-800">
-                    {s.grow_cycle?.field?.name || 'Field'}
+                    {s.grow_cycle?.field?.name || 'Block'}
                   </h4>
-                  <p className="text-xs text-gray-400">{s.grow_cycle?.crop?.name || 'Crop'}</p>
+                  <p className="text-xs text-gray-400">
+                    {s.grow_cycle?.crop?.name || 'Crop'}
+                    {s.grow_cycle?.crop?.variety && ` · ${s.grow_cycle.crop.variety}`}
+                  </p>
                 </div>
                 <StatusBadge status={s.status} />
               </div>
@@ -237,7 +240,7 @@ export default function HarvestScheduling() {
               {/* Team Members */}
               {s.harvest_schedule_members?.length > 0 && (
                 <div className="mt-3 pt-3 border-t border-gray-100">
-                  <p className="text-[10px] uppercase tracking-wider text-gray-400 mb-1.5">Team</p>
+                  <p className="text-[10px] uppercase tracking-wider text-gray-400 mb-1.5">Crew</p>
                   <div className="flex flex-wrap gap-1">
                     {s.harvest_schedule_members.map((m) => (
                       <span key={m.id} className="text-xs bg-primary-50 text-primary-700 px-2 py-0.5 rounded-full">
