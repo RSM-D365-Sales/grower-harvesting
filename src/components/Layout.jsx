@@ -14,12 +14,13 @@ import {
   Settings,
   Users,
   MapPin,
-  LogOut,
-  Shield,
+  Building2,
 } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
 import BluestemMark, { BluestemWordmark } from './BluestemMark'
 import rsmLogo from '../assets/rsmus-logo.png'
+
+// Fixed demo persona for the title ribbon (employees.csv) — there is no login.
+const PERSONA = { name: 'Ingrid Larsen', title: 'Head Grower · Bluestem Greens', initials: 'IL' }
 
 const navItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -49,20 +50,8 @@ const navClass = ({ isActive }) =>
       : 'text-midnight-200 hover:bg-white/10 hover:text-white'
   }`
 
-function initialsOf(name = '') {
-  return name
-    .split(' ')
-    .filter(Boolean)
-    .map((s) => s[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase()
-}
-
 export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { user, isManager, logout } = useAuth()
-  const roleLabel = user?.role === 'manager' ? 'Manager' : 'Operator'
 
   return (
     <div className="min-h-screen flex">
@@ -122,43 +111,32 @@ export default function Layout() {
             ))}
           </div>
 
-          {/* Setup Section — Manager Only */}
-          {isManager && (
-            <div className="pt-4 mt-4 border-t border-white/10">
-              <p className="px-3 pb-2 text-[10px] uppercase tracking-wider text-midnight-400">
-                <Settings className="w-3 h-3 inline mr-1" />Setup
-              </p>
-              {setupNavItems.map(({ to, label, icon: Icon }) => (
-                <NavLink
-                  key={to}
-                  to={to}
-                  onClick={() => setSidebarOpen(false)}
-                  className={navClass}
-                >
-                  <Icon className="w-5 h-5" />
-                  {label}
-                </NavLink>
-              ))}
-            </div>
-          )}
+          {/* Setup Section */}
+          <div className="pt-4 mt-4 border-t border-white/10">
+            <p className="px-3 pb-2 text-[10px] uppercase tracking-wider text-midnight-400">
+              <Settings className="w-3 h-3 inline mr-1" />Setup
+            </p>
+            {setupNavItems.map(({ to, label, icon: Icon }) => (
+              <NavLink
+                key={to}
+                to={to}
+                onClick={() => setSidebarOpen(false)}
+                className={navClass}
+              >
+                <Icon className="w-5 h-5" />
+                {label}
+              </NavLink>
+            ))}
+          </div>
         </nav>
 
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
-          <div className="flex items-center justify-between">
-            <div className="text-xs text-midnight-200 min-w-0">
-              <p className="font-medium truncate text-white">{user?.full_name}</p>
-              <p className="flex items-center gap-1 text-midnight-300 mt-0.5">
-                <Shield className="w-3 h-3" />
-                {roleLabel}
-              </p>
-            </div>
-            <button
-              onClick={logout}
-              className="p-1.5 rounded-lg text-midnight-300 hover:text-white hover:bg-white/10 transition-colors"
-              title="Sign out"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
+          <div className="text-xs text-midnight-200 min-w-0">
+            <p className="font-medium truncate text-white flex items-center gap-1.5">
+              <Building2 className="w-3.5 h-3.5 text-midnight-300" />
+              Holland Greenhouse Campus
+            </p>
+            <p className="text-midnight-300 mt-0.5">Site HOL · D365 F&amp;SC BFP-UAT</p>
           </div>
         </div>
       </aside>
@@ -188,11 +166,11 @@ export default function Layout() {
             </span>
             <span className="flex items-center gap-2.5 pl-4 border-l border-gray-200">
               <span className="w-8 h-8 rounded-full bg-primary-600 text-white text-xs font-semibold flex items-center justify-center">
-                {initialsOf(user?.full_name)}
+                {PERSONA.initials}
               </span>
               <span className="hidden lg:block leading-tight">
-                <span className="block text-sm font-medium text-gray-800">{user?.full_name}</span>
-                <span className="block text-[11px] text-gray-500">{roleLabel}</span>
+                <span className="block text-sm font-medium text-gray-800">{PERSONA.name}</span>
+                <span className="block text-[11px] text-gray-500">{PERSONA.title}</span>
               </span>
             </span>
           </div>

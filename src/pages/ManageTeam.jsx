@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Plus, Pencil, Trash2, Users, X, Save } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
-import RoleGuard from '../components/RoleGuard'
 import { LoadingSpinner, ErrorMessage, EmptyState } from '../components/StatusMessages'
 import { useAllTeamMembers, useCreateTeamMember, useUpdateTeamMember, useDeleteTeamMember } from '../hooks/useManagement'
 
@@ -14,14 +13,6 @@ const ROLES = [
 ]
 
 export default function ManageTeam() {
-  return (
-    <RoleGuard requiredRole="manager">
-      <TeamContent />
-    </RoleGuard>
-  )
-}
-
-function TeamContent() {
   const { data: members, isLoading, error, refetch } = useAllTeamMembers()
   const createMember = useCreateTeamMember()
   const updateMember = useUpdateTeamMember()

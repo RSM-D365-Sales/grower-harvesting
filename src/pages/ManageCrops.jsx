@@ -1,19 +1,10 @@
 import { useState } from 'react'
 import { Plus, Pencil, Trash2, Sprout, X, Save } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
-import RoleGuard from '../components/RoleGuard'
 import { LoadingSpinner, ErrorMessage, EmptyState } from '../components/StatusMessages'
 import { useCrops, useCreateCrop, useUpdateCrop, useDeleteCrop } from '../hooks/useManagement'
 
 export default function ManageCrops() {
-  return (
-    <RoleGuard requiredRole="manager">
-      <CropsContent />
-    </RoleGuard>
-  )
-}
-
-function CropsContent() {
   const { data: crops, isLoading, error, refetch } = useCrops()
   const createCrop = useCreateCrop()
   const updateCrop = useUpdateCrop()

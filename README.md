@@ -61,9 +61,9 @@ Source: `../Blustem-company-details/` — `BRAND_GUIDE.md`, `PUN_BANK.md`, and
 | D365 warehouses | `sites.csv` | HOL-GH (default, campus pack room), HOL-DC, GRP-RM, HRT-PK. |
 | D365 customers / orders | `customers.csv` | Pack IDs (C100xx, SO-50xxx, PRD-9xxxx). |
 
-Demo logins (email only): `ingrid.larsen@bluestemfresh.com` /
-`sam.fischer@bluestemfresh.com` (managers), `ben.carter@bluestemfresh.com` /
-`rosa.delgado@bluestemfresh.com` (operators).
+There is no login: the app opens straight on the dashboard and the title
+ribbon shows a fixed persona (Ingrid Larsen, Head Grower). The `app_users`
+table from migration 005 is left in place but unused.
 
 The pre-rebrand hydroponic dataset that was live in Supabase is preserved as
 JSON in `supabase/backups/2026-09-24-farmbox-greens-live/`. An alternative

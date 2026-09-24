@@ -1,7 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { useAuth } from './contexts/AuthContext'
 import Layout from './components/Layout'
-import LoginPage from './pages/LoginPage'
 import Dashboard from './pages/Dashboard'
 import GrowCycles from './pages/GrowCycles'
 import GrowCycleDetail from './pages/GrowCycleDetail'
@@ -15,14 +13,9 @@ import D365Products from './pages/D365Products'
 import D365ProductionOrders from './pages/D365ProductionOrders'
 import D365Demand from './pages/D365Demand'
 import D365Mappings from './pages/D365Mappings'
-import { LoadingSpinner } from './components/StatusMessages'
 
+// Demo app — no login. Every page is reachable; the ribbon shows a fixed persona.
 export default function App() {
-  const { user, loading } = useAuth()
-
-  if (loading) return <LoadingSpinner />
-  if (!user) return <LoginPage />
-
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -31,11 +24,9 @@ export default function App() {
         <Route path="grow-cycles/:id" element={<GrowCycleDetail />} />
         <Route path="harvest-scheduling" element={<HarvestScheduling />} />
         <Route path="yield-management" element={<YieldManagement />} />
-        {/* Manager-only setup pages */}
         <Route path="setup/crops" element={<ManageCrops />} />
         <Route path="setup/team" element={<ManageTeam />} />
         <Route path="setup/fields" element={<ManageFields />} />
-        {/* D365 Integration (manager-only in nav, but routable) */}
         <Route path="d365" element={<D365Integration />} />
         <Route path="d365/products" element={<D365Products />} />
         <Route path="d365/production-orders" element={<D365ProductionOrders />} />

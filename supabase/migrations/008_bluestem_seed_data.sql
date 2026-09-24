@@ -49,19 +49,7 @@ delete from d365_customers;
 delete from d365_warehouses;
 delete from d365_products;
 
--- -----------------------------------------------
--- APP USERS — demo personas (employees.csv)
--- -----------------------------------------------
-update app_users set is_active = false
-where email in ('admin@grower.local', 'operator@grower.local');
-
-insert into app_users (email, full_name, role, is_active) values
-  ('ingrid.larsen@bluestemfresh.com', 'Ingrid Larsen', 'manager',  true),   -- Head Grower (Field Agronomist)
-  ('sam.fischer@bluestemfresh.com',   'Sam Fischer',   'manager',  true),   -- Grower Relations Mgr
-  ('ben.carter@bluestemfresh.com',    'Ben Carter',    'operator', true),   -- Production Planner
-  ('rosa.delgado@bluestemfresh.com',  'Rosa Delgado',  'operator', true)    -- Buyer - Produce
-on conflict (email) do update
-  set full_name = excluded.full_name, role = excluded.role, is_active = true;
+-- (The app has no login — the app_users table from migration 005 is unused.)
 
 -- -----------------------------------------------
 -- TEAM MEMBERS — staff + greenhouse harvest crew

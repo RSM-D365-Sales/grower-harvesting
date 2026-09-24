@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Plus, Pencil, Trash2, MapPin, X, Save } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
-import RoleGuard from '../components/RoleGuard'
 import { LoadingSpinner, ErrorMessage, EmptyState } from '../components/StatusMessages'
 import { useAllFields, useCreateField, useUpdateField, useDeleteField } from '../hooks/useManagement'
 
@@ -26,14 +25,6 @@ const STATUS_COLORS = {
 }
 
 export default function ManageFields() {
-  return (
-    <RoleGuard requiredRole="manager">
-      <FieldsContent />
-    </RoleGuard>
-  )
-}
-
-function FieldsContent() {
   const { data: fields, isLoading, error, refetch } = useAllFields()
   const createField = useCreateField()
   const updateField = useUpdateField()

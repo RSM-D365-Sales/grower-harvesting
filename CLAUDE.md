@@ -37,10 +37,11 @@ folder spelling): `BRAND_GUIDE.md`, `PUN_BANK.md`, and
 - The Bluestem mark/wordmark is `src/components/BluestemMark.jsx`. The
   "Powered by RSM" mark is required on the title ribbon (`Layout.jsx`) and the
   login page — right end, left of the avatar, never beside the bluestem logo.
-- Login is an email lookup against `app_users` (no password) — demo personas
-  come from `employees.csv`: Ingrid Larsen / Sam Fischer (managers), Ben Carter /
-  Rosa Delgado (operators). Until 008 is run, `admin@grower.local` is the only
-  manager login in the database. Don't add password fields.
+- **No login.** The auth context, login page and role guards were removed on
+  2026-09-24 at the user's request; the app opens on the dashboard and every
+  page (including Setup) is reachable. The ribbon persona is a constant in
+  `Layout.jsx` (Ingrid Larsen, Head Grower). Don't re-add a login or password
+  form; `app_users` (migration 005) is unused.
 - Deploys on push to `master`: Cloudflare Pages via its Git integration (the live
   demo, https://grower-harvesting.rsmd365.com, built with `BASE_PATH=/`) and
   Azure Static Web Apps (`.github/workflows/azure-static-web-apps-*.yml`).

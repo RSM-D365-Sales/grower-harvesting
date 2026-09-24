@@ -163,39 +163,3 @@ export function useDeleteField() {
   })
 }
 
-// ─── App Users (for managing users — manager only) ──────────
-
-export function useAppUsers() {
-  return useQuery({
-    queryKey: ['app-users'],
-    queryFn: async () => {
-      const { data, error } = await supabase.from('app_users').select('*').order('full_name')
-      if (error) throw error
-      return data
-    },
-  })
-}
-
-export function useCreateAppUser() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: async (user) => {
-      const { data, error } = await supabase.from('app_users').insert(user).select().single()
-      if (error) throw error
-      return data
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['app-users'] }),
-  })
-}
-
-export function useUpdateAppUser() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: async ({ id, ...updates }) => {
-      const { data, error } = await supabase.from('app_users').update(updates).eq('id', id).select().single()
-      if (error) throw error
-      return data
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['app-users'] }),
-  })
-}
