@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grower Harvesting Demo Cheat Sheet</title>
+<!--
+  Presenter cheat sheet for the Bluestem Greens Grower Harvesting demo (IFPA booth).
+  Self-contained: fonts and the RSM mark are local files in ./assets. Prints to two
+  Letter pages. Numbers quoted here come from supabase/migrations/008_bluestem_seed_data.sql;
+  if the app shows different figures, the seed has drifted and should be re-run.
+-->
+<style>
+  /* Layout: one reading column (~70ch) with a wide "click path" table that is the
+     working part of the page. Brand tokens from BRAND_GUIDE.md / src/index.css. */
+  @font-face { font-family: 'Poppins'; font-weight: 600; font-display: swap; src: url('assets/poppins-600.woff2') format('woff2'); }
+  @font-face { font-family: 'Poppins'; font-weight: 500; font-display: swap; src: url('assets/poppins-500.woff2') format('woff2'); }
+
+  :root {
+    color-scheme: light;
+    --bg: #FFFFFF;
+    --bg-2: #F2F3F4;            /* Fog */
+    --surface: #FFFFFF;
+    --ink: #00153D;             /* Midnight */
+    --ink-2: #33415C;
+    --muted: #5E6C86;
+    --line: #D8DEE8;
+    --accent: #009CDE;          /* RSM Blue */
+    --accent-ink: #00739F;      /* AA on white */
+    --sky: #E5F5FC;
+    --green: #3F9C35;
+    --amber: #B57E00;
+    --amber-bg: #FFF8E1;
+    --red: #D0342C;
+    --red-bg: #FDECEA;
+    --d365: #3A4FA8;
+    --d365-bg: #EEF0F9;
+    --logo-light: inline-block;
+    --logo-dark: none;
+    --font-display: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+    --font-body: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --font-mono: Consolas, 'Cascadia Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #00153D; --bg-2: #0B2454; --surface: #0B2454; --ink: #FFFFFF; --ink-2: #DCE3EE; --muted: #9FB0CC;
+      --line: rgba(255,255,255,.14); --accent: #009CDE; --accent-ink: #4FC3F7; --sky: rgba(0,156,222,.16);
+      --green: #6FC265; --amber: #F2A900; --amber-bg: rgba(242,169,0,.14); --red: #FF7B72; --red-bg: rgba(208,52,44,.18);
+      --d365: #8FA0E8; --d365-bg: rgba(58,79,168,.25); --logo-light: none; --logo-dark: inline-block;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #00153D; --bg-2: #0B2454; --surface: #0B2454; --ink: #FFFFFF; --ink-2: #DCE3EE; --muted: #9FB0CC;
+    --line: rgba(255,255,255,.14); --accent: #009CDE; --accent-ink: #4FC3F7; --sky: rgba(0,156,222,.16);
+    --green: #6FC265; --amber: #F2A900; --amber-bg: rgba(242,169,0,.14); --red: #FF7B72; --red-bg: rgba(208,52,44,.18);
+    --d365: #8FA0E8; --d365-bg: rgba(58,79,168,.25); --logo-light: none; --logo-dark: inline-block;
+  }
+
+  * { box-sizing: border-box; }
+  html { font-size: 15px; }
+  body { margin: 0; background: var(--bg); color: var(--ink-2); font-family: var(--font-body); line-height: 1.5; padding-block: 0 48px; padding-inline: 20px; }
+  .page { max-width: 1040px; margin: 0 auto; display: grid; row-gap: 36px; }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 600; color: var(--ink); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+  h1 { font-size: 2rem; line-height: 1.15; }
+  h2 { font-size: 1.25rem; line-height: 1.25; display: flex; align-items: center; gap: 12px; }
+  h2::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  h3 { font-size: 1rem; }
+  p { margin: 0; max-width: 72ch; }
+  a { color: var(--accent-ink); }
+  code { font-family: var(--font-mono); font-size: .9em; background: var(--bg-2); padding: .05em .35em; border-radius: 4px; color: var(--ink); }
+  .eyebrow { font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  section { display: grid; row-gap: 16px; }
+
+  /* header */
+  header { border-bottom: 1px solid var(--line); padding-block: 28px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; }
+  .lockup { display: flex; align-items: center; gap: 14px; }
+  .lockup svg { width: 44px; height: 44px; flex: none; }
+  .wordmark { font-family: var(--font-display); font-weight: 600; font-size: 1.7rem; line-height: 1; color: var(--accent); }
+  .wordmark .stem { color: var(--ink); }
+  .title { display: grid; row-gap: 4px; }
+  .rsm { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .8rem; }
+  .rsm img { height: 22px; width: auto; display: var(--logo-light); }
+  .rsm img.dark { display: var(--logo-dark); }
+
+  /* at-a-glance grid */
+  .glance { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+  .glance div { background: var(--bg-2); border-radius: 10px; padding: 12px 14px; display: grid; row-gap: 2px; }
+  .glance .k { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .glance .v { color: var(--ink); font-weight: 600; font-size: .95rem; line-height: 1.3; }
+  .glance .v small { display: block; font-weight: 400; color: var(--muted); font-size: .8rem; }
+
+  /* checklist */
+  .check { list-style: none; margin: 0; padding: 0; display: grid; row-gap: 10px; max-width: 80ch; }
+  .check li { position: relative; padding-left: 34px; }
+  .check li::before { content: ''; position: absolute; left: 0; top: 3px; width: 18px; height: 18px; border: 2px solid var(--accent); border-radius: 5px; box-sizing: border-box; }
+  .warn { border-left: 4px solid var(--amber); background: var(--amber-bg); padding: 10px 14px; border-radius: 0 8px 8px 0; max-width: 80ch; }
+  .warn b { color: var(--ink); }
+
+  /* click path */
+  .path { width: 100%; border-collapse: collapse; font-size: .92rem; }
+  .path th { text-align: left; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 0 12px 10px; border-bottom: 1px solid var(--line); }
+  .path td { padding: 14px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .path tr:last-child td { border-bottom: 0; }
+  .path .n { font-family: var(--font-display); font-weight: 600; color: var(--accent-ink); font-variant-numeric: tabular-nums; width: 2.2rem; padding-right: 0; }
+  .path .where { width: 15rem; }
+  .path .where b { color: var(--ink); display: block; font-weight: 600; }
+  .path .where span { color: var(--muted); font-size: .85rem; }
+  .path ul { margin: 0; padding-left: 1.1rem; display: grid; row-gap: 3px; }
+  .path .say { border-left: 3px solid var(--accent); padding-left: 12px; color: var(--ink); font-style: italic; }
+  .pill { display: inline-block; font-size: .72rem; font-weight: 600; padding: 1px 8px; border-radius: 999px; line-height: 1.6; vertical-align: 1px; }
+  .pill.ok { background: rgba(63,156,53,.14); color: var(--green); }
+  .pill.warn { background: var(--amber-bg); color: var(--amber); }
+  .pill.bad { background: var(--red-bg); color: var(--red); }
+  .pill.d365 { background: var(--d365-bg); color: var(--d365); }
+  .table-wrap { overflow-x: auto; }
+
+  /* cast / ids */
+  .cast { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px 36px; }
+  .cast dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; column-gap: 14px; row-gap: 6px; font-size: .9rem; }
+  .cast dt { color: var(--muted); }
+  .cast dd { margin: 0; color: var(--ink); }
+  .cast dd code { font-size: .82em; }
+
+  /* Q&A */
+  .qa { display: grid; row-gap: 14px; max-width: 80ch; }
+  .qa div { display: grid; row-gap: 4px; }
+  .qa .q { font-weight: 600; color: var(--ink); }
+
+  /* loop */
+  .loop { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: .9rem; }
+  .loop span { background: var(--bg-2); border-radius: 8px; padding: 8px 12px; color: var(--ink); }
+  .loop span.card { background: var(--ink); color: #fff; }
+  .loop i { color: var(--muted); font-style: normal; }
+
+  footer { border-top: 1px solid var(--line); padding-top: 18px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: .82rem; color: var(--muted); }
+
+  @media (max-width: 720px) {
+    .path thead { display: none; }
+    .path tr { display: grid; grid-template-columns: 2.2rem 1fr; }
+    .path td { border-bottom: 0; padding: 6px 12px; }
+    .path td.n { grid-row: 1 / span 3; padding-top: 10px; }
+    .path tr { border-bottom: 1px solid var(--line); padding-block: 6px; }
+  }
+  @media print {
+    html { font-size: 11.5px; }
+    body { padding: 0; background: #fff; color: #222; }
+    .page { max-width: none; row-gap: 20px; }
+    header { padding-block: 8px 12px; }
+    section { break-inside: avoid; }
+    .path td { padding: 8px 10px; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="lockup">
+    <svg viewBox="40 30 200 220" aria-hidden="true">
+      <path d="M62 232 Q75 150 150 130" stroke="#009CDE" stroke-width="26" stroke-linecap="round" fill="none"/>
+      <g transform="translate(155 108) rotate(-45)">
+        <path d="M-72 0 C-40 -50 40 -50 72 0 C40 50 -40 50 -72 0 Z" fill="#3F9C35"/>
+        <path d="M-45 0 L45 0" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+      </g>
+    </svg>
+    <div class="title">
+      <div class="wordmark" aria-label="bluestem">blue<span class="stem">stem</span></div>
+      <h1>Grower Harvesting · demo cheat sheet</h1>
+      <div class="eyebrow">Bluestem Greens · IFPA 2026 · Lettuce show you what D365 can do.</div>
+    </div>
+  </div>
+  <div class="rsm"><span>Powered by</span><img src="assets/rsm-logo.png" alt="RSM"><img class="dark" src="assets/rsm-logo-white.png" alt=""></div>
+</header>
+
+<section>
+  <div class="glance">
+    <div><span class="k">Open</span><span class="v"><a href="https://grower-harvesting.rsmd365.com">grower-harvesting.rsmd365.com</a><small>No login. Lands on the Dashboard.</small></span></div>
+    <div><span class="k">You are</span><span class="v">Ingrid Larsen<small>Head Grower, Bluestem Greens (fixed persona in the ribbon)</small></span></div>
+    <div><span class="k">Where</span><span class="v">Holland Greenhouse Campus · site HOL<small>Pack room HOL-GH · ships from HOL-DC · processing grade to GRP</small></span></div>
+    <div><span class="k">ERP</span><span class="v">Dynamics 365 F&amp;SC · BFP-UAT<small>OData v4 both ways through a Supabase Edge Function</small></span></div>
+    <div><span class="k">Loop clip</span><span class="v">58.5 s tour + 12 s title card<small>demo-kit/out · captions burned in</small></span></div>
+  </div>
+</section>
+
+<section>
+  <h2>Before you walk up</h2>
+  <ul class="check">
+    <li>Open the Dashboard. <b>Harvest Ready should read 4 and Pending D365 Sync 3</b>, and the Upcoming Cuts should be dated today and tomorrow. If the dates are old, the seed has gone stale: paste <code>supabase/migrations/008_bluestem_seed_data.sql</code> into the Supabase SQL editor and run it. It is re-runnable and re-anchors every date to today.</li>
+    <li>Browser at 100% zoom, window at least 1280 px wide so the sidebar stays open.</li>
+    <li>Know the cast below. Every grower, crew member, customer and figure is Bluestem's fictional demo set. Never describe it as a live tenant or as executed ERP postings.</li>
+  </ul>
+  <div class="warn"><b>Don't press Test Connection, Extract from D365, Pull Orders, Pull Inventory, or Retry.</b> They call the real D365 proxy, which has no credentials on the show floor, and will show an error. The inbound pages already hold the cached data you need. Start Harvest, Mark Complete and the phase-advance arrows are fine to click; they write to the demo database, so re-run the seed afterwards to reset.</div>
+</section>
+
+<section>
+  <h2>The story in thirty seconds</h2>
+  <p>Bluestem Greens is Bluestem Fresh Produce's greenhouse division: living lettuce and herbs in NFT and DWC bays, microgreens on vertical racks, high-wire mini cucumbers, and a propagation house feeding them all. Ingrid runs ten bays and rooms from this app. Today the butter lettuce in GH-1 Bay B is ready for the Great Lakes Grocers morning truck, pea shoots are mid-cut in Micro Room A, and yesterday's cucumber pick is stuck in the D365 queue on a batch error. Everything the crew records lands in Dynamics 365 as inventory journals and Report as Finished; everything D365 knows about items, production orders, demand and on-hand flows back.</p>
+</section>
+
+<section>
+  <h2>Click path</h2>
+  <div class="table-wrap">
+  <table class="path">
+    <thead><tr><th></th><th>Go to</th><th>Point at</th><th>Say</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="n">1</td>
+        <td class="where"><b>Dashboard</b><span>Sidebar, first item</span></td>
+        <td><ul>
+          <li>KPI row: <b>Harvest Ready 4</b>, <b>Total Yield 2,635 lbs · 2,400 heads</b>, <b>Pending D365 Sync 3</b></li>
+          <li>Yield by Grade donut: A 2,477 lbs, C 158 lbs</li>
+          <li>Upcoming Cuts: GH-1 Bay B butter lettuce at 05:00 today</li>
+        </ul></td>
+        <td class="say">One screen for the whole campus. Notice yields are never summed across units. Heads stay heads, pounds stay pounds.</td>
+      </tr>
+      <tr>
+        <td class="n">2</td>
+        <td class="where"><b>Grow Cycles</b><span>Filter chip <i>harvest ready</i>, then the eye icon on GH-1 Bay B</span></td>
+        <td><ul>
+          <li>Phase chips: bay prep, planting, growing, harvest ready, harvesting</li>
+          <li>Four ready cycles: GH-1 Bay B (Butter Lettuce, Red Oakleaf) and GH-2 Bay B (Spring Mix, Baby Kale)</li>
+          <li>Detail page: Cycle Progress bar, 14,400 sq ft, NFT Hydroponic</li>
+          <li>Propagation House rows: romaine plugs transplant to GH-1 in ten days</li>
+        </ul></td>
+        <td class="say">Bay prep to planting to growth to harvest, per bay. The arrow on each row advances the phase; the propagation house is what keeps the bays turning.</td>
+      </tr>
+      <tr>
+        <td class="n">3</td>
+        <td class="where"><b>Harvest Scheduling</b><span>Filter chip <i>in progress</i>, then <i>All</i></span></td>
+        <td><ul>
+          <li><span class="pill warn">In Progress</span> Micro Room A pea shoots 04:30–07:00, crew Luis Ortega and Mateo Alvarez, racks 1–3 done</li>
+          <li><span class="pill ok">Scheduled</span> GH-1 Bay B butter lettuce 05:00–09:00, Ingrid, Mateo, Josie, Yara Sato on delivery, "Great Lakes Grocers morning truck"</li>
+          <li><span class="pill bad">Cancelled</span> GH-1 Bay A, power outage at the campus, Reopen button</li>
+          <li>GH-5 cucumbers tomorrow: Pick #13, high-wire crew, 1 lb bags for Summit Club</li>
+        </ul></td>
+        <td class="say">Crew, cut window and customer truck on one card. Start Harvest, then Mark Complete. Completing a cut is what queues Report as Finished to D365.</td>
+      </tr>
+      <tr>
+        <td class="n">4</td>
+        <td class="where"><b>Yield Management</b><span>Scroll to the table, then <i>Record Yield</i> to show the form (Cancel)</span></td>
+        <td><ul>
+          <li>Grade A 94% of pounds; Short Lead-Time Yield tile</li>
+          <li>Chart: each crop in its own unit</li>
+          <li>Spring Mix 240 lbs grade A and 18 lbs grade C "sent to GRP fresh-cut salad line"</li>
+          <li>Red lead-time flags: microgreens 6 h cut-to-cooler, baby greens 12 h</li>
+          <li>Mini Cucumbers Pick #12: 1,860 lbs A, 140 lbs C to the veggie tray line</li>
+        </ul></td>
+        <td class="say">Cut by cut, graded. A is premium retail, B foodservice, C goes to Grand Rapids for salad kits. Every record is queued to D365 the moment it is saved.</td>
+      </tr>
+      <tr>
+        <td class="n">5</td>
+        <td class="where"><b>D365 Sync Queue</b><span>Status chip <i>failed</i>; hover Retry, don't click</span></td>
+        <td><ul>
+          <li>Tiles: Pending 3 · Synced 1 · <span class="pill bad">Failed 1</span></li>
+          <li>Failed row: Mini Cucumbers 1,860 lbs grade A, 2 attempts, error "batch BT-…-03 is not registered for PK-CUC-MINI at warehouse HOL-GH"</li>
+          <li>Synced row: Spring Mix harvest, ReportAsFinished on PRD-91003</li>
+          <li>Architecture cards: Harvest → Production Orders, Yields → Inventory Journals</li>
+        </ul></td>
+        <td class="say">The batch wasn't registered in D365 yet. That used to be a phone call between the pack room and finance. Register the batch, press Retry, done.</td>
+      </tr>
+      <tr>
+        <td class="n">6</td>
+        <td class="where"><b>D365 Products</b><span class="pill d365">inbound</span></td>
+        <td><ul>
+          <li>21 released products: PK-LIV-BUT $2.50, shelf life 14 d; PK-MIC-* 5 d</li>
+          <li>Pack's own items alongside: PK-ROM-HRT, PK-CUC-MINI, FC-SAL-GARDEN, FC-SAL-CAESAR</li>
+          <li>Buyer group Greenhouse vs Produce</li>
+        </ul></td>
+        <td class="say">Released products pulled over OData. Greenhouse items use the pack's numbering, so finance sees one catalogue.</td>
+      </tr>
+      <tr>
+        <td class="n">7</td>
+        <td class="where"><b>Production Orders</b><span class="pill d365">inbound</span></td>
+        <td><ul>
+          <li>PRD-91004 pea shoots <b>Started</b>, 60 ordered, 18 remaining</li>
+          <li>PRD-91001 butter lettuce 2,400 heads Released at HOL-GH</li>
+          <li>PRD-90627 Garden Salad Kit 1,200 cases at GRP-RM</li>
+        </ul></td>
+        <td class="say">The pack orders behind today's cuts. The pea-shoot order is already two-thirds reported because the crew has been cutting since 4:30.</td>
+      </tr>
+      <tr>
+        <td class="n">8</td>
+        <td class="where"><b>Demand &amp; Inventory</b>, then <b>Mappings &amp; Log</b><span class="pill d365">inbound</span><span> · tabs <i>On-Hand Inventory</i>, <i>Bay → Warehouse</i></span></td>
+        <td><ul>
+          <li>Urgent (≤48 h) tile: Lakeside Natural Foods SO-50574 and Fresh Bowl Kitchens SO-50579 ship tomorrow</li>
+          <li>SO-50571 Great Lakes Grocers: 1,200 heads butter lettuce, ships in 2 days</li>
+          <li>On-hand: PK-LIV-BUT 2,400 physical at HOL-DC; PK-CUC-MINI batch BT-…-03 (the one that failed)</li>
+          <li>Mappings: every crop → PK item, every bay → HOL-GH; Sync History tab</li>
+        </ul></td>
+        <td class="say">Demand and on-hand come back from D365, and the mappings are what make every outbound posting land on the right item and warehouse. Two directions, one source of truth.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>Cast and identifiers</h2>
+  <div class="cast">
+    <dl>
+      <dt>Head Grower</dt><dd>Ingrid Larsen (ribbon persona)</dd>
+      <dt>Plant Manager</dt><dd>Caleb Novak, leads the high-wire cucumber pick</dd>
+      <dt>Planner / QA / Dispatch</dt><dd>Ben Carter · Sofia Ruiz · Yara Sato</dd>
+      <dt>Harvest crew</dt><dd>Mateo Alvarez (lead), Josie Vanderberg, Luis Ortega (micro room), Dale Brinks (high-wire), Priya Raman (propagation)</dd>
+      <dt>Bays</dt><dd>GH-1 A/B living lettuce · GH-2 A/B baby greens · GH-3 herbs · GH-4 expansion · GH-5 cucumbers · Micro Rooms A/B · Propagation House</dd>
+    </dl>
+    <dl>
+      <dt>Retail customers</dt><dd>Great Lakes Grocers <code>C10001</code> · Summit Club Stores <code>C10007</code> · Lakeside Natural Foods <code>C10009</code> · Northwind Foods <code>C10002</code></dd>
+      <dt>Foodservice / other</dt><dd>Campus Dining Partners · Fresh Bowl Kitchens · Pantry Prime Meal Kits · Windy City Salad Works (processor)</dd>
+      <dt>Items</dt><dd><code>PK-LIV-*</code> living lettuce · <code>PK-BBY-*</code> baby greens · <code>PK-HRB-*</code> herbs · <code>PK-MIC-*</code> microgreens · <code>FC-SAL-*</code> salad kits</dd>
+      <dt>Orders</dt><dd>Production <code>PRD-9xxxx</code> · Sales <code>SO-50xxx</code> · Batches <code>BT-yyyymmdd-nn</code></dd>
+      <dt>Warehouses</dt><dd><code>HOL-GH</code> pack room (default) · <code>HOL-DC</code> · <code>GRP-RM</code> · <code>HRT-PK</code></dd>
+    </dl>
+  </div>
+</section>
+
+<section>
+  <h2>Questions you will get</h2>
+  <div class="qa">
+    <div><span class="q">Is this actually talking to D365?</span><p>Yes, by design: inbound pages cache D365 OData v4 entities (ReleasedProductsV2, ProductionOrderHeaders, SalesOrderHeadersV2 and LinesV2, InventOnHandEntities) through a Supabase Edge Function that holds the Azure AD client credentials; outbound posts inventory counting journals and the Report as Finished action. The booth build points at the BFP-UAT environment with the extract buttons unwired, so what you see is the cached demo set.</p></div>
+    <div><span class="q">We grow open-field, not greenhouse.</span><p>Same application. Bays and square feet are labels over the same fields-and-acres model; an open-field version of the seed exists. Crew scheduling, graded yields and the D365 queue don't change.</p></div>
+    <div><span class="q">How does grading reach finance?</span><p>Grade rides on the journal line. A is premium retail, B foodservice, C processing to the Grand Rapids fresh-cut plant, reject is compost. The dashboard donut is the same split.</p></div>
+    <div><span class="q">What about lot traceability?</span><p>Every packed item is batch-tracked in D365 (tracking dimension group Batch). The failed sync is the batch check doing its job: D365 refused a journal line for a batch it hadn't registered.</p></div>
+    <div><span class="q">Why a sync queue instead of posting straight away?</span><p>So the greenhouse never stops when the ERP is busy. Records queue locally, post in order, and failures are visible with the exact D365 error and a retry instead of silently dropping.</p></div>
+    <div><span class="q">Can the crew use it in the greenhouse?</span><p>The layout is responsive; the sidebar collapses on a tablet. The cut-by-cut yield form is three fields.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>If something goes wrong</h2>
+  <ul class="check">
+    <li><b>Dates or names look wrong, or a page is empty.</b> Re-run migration 008 in the Supabase SQL editor; it clears and reloads every demo table in about two seconds. Then refresh the browser.</li>
+    <li><b>Someone pressed Test Connection or Extract and got a red box.</b> "The UAT connection isn't wired on the show floor." Press Refresh on the page and carry on; the cached data is intact.</li>
+    <li><b>You advanced phases or completed cuts during a walkthrough.</b> That's fine for the conversation. Re-run the seed before the next one so the story resets to "butter lettuce ready today".</li>
+    <li><b>Nothing loads at all.</b> Check the booth network; the app reads from Supabase over HTTPS. Fall back to the looping video while it reconnects.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Looping video</h2>
+  <div class="loop">
+    <span class="card">Title card · 12 s</span><i>→</i>
+    <span>Grower Harvesting tour · 58.5 s</span><i>→</i>
+    <span class="card">Title card · 12 s</span><i>→</i>
+    <span>next Bluestem app …</span>
+  </div>
+  <p>The tour is captioned bottom-left so it works muted. The voice-over script with timecodes is in <code>demo-kit/voiceover-script.md</code>; rendered files are in <code>demo-kit/out/</code>. To re-render after a data change: build the app, serve it, then <code>node demo-kit/record.mjs</code>.</p>
+</section>
+
+<footer>
+  <span>Bluestem Fresh Produce is RSM's fictional IFPA mock company. Figures from <code>008_bluestem_seed_data.sql</code>.</span>
+  <span>Grower Harvesting · Bluestem Greens edition</span>
+</footer>
+
+</div>
+</body>
+</html>

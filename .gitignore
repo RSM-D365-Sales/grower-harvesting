@@ -3,3 +3,6 @@ dist
 .env
 .env.local
 *.log
+
+# rendered booth videos (regenerate with node demo-kit/record.mjs)
+demo-kit/out/
