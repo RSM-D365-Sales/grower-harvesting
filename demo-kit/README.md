@@ -7,11 +7,14 @@ walk someone through the live demo.
 |---|---|
 | `scenes.mjs` | **Source of truth** for the video: scene order, seconds per scene, captions, voice-over lines. Edit this, then re-run the scripts below. |
 | `record.mjs` | Drives the running app with Playwright and records the tour (1920×1080) plus the title card. Writes WebM and, when an H.264 ffmpeg is available, MP4. |
-| `write-script.mjs` | Regenerates `voiceover-script.md` (timecodes, words-per-minute check). |
+| `write-script.mjs` | Regenerates `voiceover-script.md`, injects the script into `cheat-sheet.html`, and writes the single-file `grower-harvesting-cheat-sheet.html`. |
 | `scratch-vo.mjs` | Lays a Windows text-to-speech read over the tour so pacing can be checked before a real voice is recorded. |
+| `caption-reel.mjs` | Joins the title card and tour into `out/grower-harvesting-reel.mp4` with the voice-over burned in as subtitles (the booth loop plays muted). Backs up the previous reel to `out/backup/`. |
 | `voiceover-script.md` | Generated. The narrator's copy with timecodes. |
 | `interstitial.html` | The 12 s "Up next" title card shown between clips. Open in a browser (`?loop=1` to loop) or let `record.mjs` render it. |
-| `cheat-sheet.html` | Presenter cheat sheet: click path, what to say, cast, Q&A, resets. Prints to two pages. |
+| `cheat-sheet.html` | Presenter cheat sheet source: click path, what to say, cast, Q&A, resets, plus the voice-over script (injected from `scenes.mjs`). |
+| `grower-harvesting-cheat-sheet.html` | **Generated.** The same sheet as one self-contained file (fonts and logos inlined). This is the one to share with the team. |
+| `REUSE-PROMPT.md` | The prompt to paste into Claude Code to build the same kit for another Bluestem app. |
 | `assets/` | Poppins woff2 and the RSM marks so the HTML pages work offline. |
 | `out/` | Rendered videos and timing JSON (git-ignored). |
 
@@ -30,6 +33,7 @@ npx vite preview --port 5199 --strictPort      # leave running
 node demo-kit/record.mjs                        # tour + title card → demo-kit/out/
 node demo-kit/record.mjs --only tour --no-captions
 node demo-kit/scratch-vo.mjs                    # optional: TTS pacing check
+node demo-kit/caption-reel.mjs                  # title card + tour → subtitled loop reel
 ```
 
 `record.mjs` uses Playwright's full Chromium (`channel: 'chromium'`) so the
